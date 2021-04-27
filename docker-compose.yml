@@ -2,11 +2,20 @@ version: "3.1"
 services: 
   postgres: 
     image: postgres:11-alpine
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
     restart: always
     environment:
-      POSTGRES_PASSWORD: actix
-      POSTGRES_USER: actix
-      POSTGRES_DB: actix
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - APP_DB_USER=todoservice
+      - APP_DB_PASS=todoservice
+      - APP_DB_NAME=todoservice
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
     ports:
       - 5432:5432
     deploy:
@@ -18,14 +27,16 @@ services:
     build: .
     links:
       - postgres
+    depends_on: 
+      - postgres
     environment:
       SERVER.HOST: 0.0.0.0
       SERVER.PORT: 8080
-      PG.USER: actix
-      PG.PASSWORD: actix
+      PG.USER: todoservice
+      PG.PASSWORD: todoservice
       PG.HOST: postgres
       PG.PORT: 5432
-      PG.DBNAME: actix
+      PG.DBNAME: todoservice
       PG.POOL.MAX_SIZE: 30
     deploy:
       resources:
