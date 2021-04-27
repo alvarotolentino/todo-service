@@ -1,6 +1,6 @@
 version: "3.1"
 services: 
-  postgres: 
+  db: 
     image: postgres:11-alpine
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
@@ -23,18 +23,18 @@ services:
         limits:
           memory: '512M'
           cpus: '1'
-  todo-service:
+  api:
     build: .
     links:
-      - postgres
+      - db
     depends_on: 
-      - postgres
+      - db
     environment:
       SERVER.HOST: 0.0.0.0
       SERVER.PORT: 8080
       PG.USER: todoservice
       PG.PASSWORD: todoservice
-      PG.HOST: postgres
+      PG.HOST: db
       PG.PORT: 5432
       PG.DBNAME: todoservice
       PG.POOL.MAX_SIZE: 30
