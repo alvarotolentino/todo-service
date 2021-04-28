@@ -33,8 +33,11 @@ impl AppError {
   }
 
   pub fn db_error(error: impl ToString) -> AppError {
-    AppError{message: None, cause: Some(error.to_string()), error_type: AppErrorType::DbError}
-
+    AppError {
+      message: None,
+      cause: Some(error.to_string()),
+      error_type: AppErrorType::DbError,
+    }
   }
 }
 
@@ -61,5 +64,56 @@ impl ResponseError for AppError {
     HttpResponse::build(self.status_code()).json(AppErrorResponse {
       error: self.message(),
     })
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::{AppError, AppErrorType};
+  #[test]
+  fn test_default_message() {
+    let db_error: AppError = AppError {
+      message: None,
+      cause: None,
+      error_type: AppErrorType::DbError,
+    };
+
+    assert_eq!(
+      db_error.message(),
+      "An unexpected error has occurred".to_string(),
+      "Default message should be shown"
+    )
+  }
+
+  #[test]
+  fn test_not_found_message() {
+    let not_found_error: AppError = AppError {
+      message: None,
+      cause: None,
+      error_type: AppErrorType::NotFoundError,
+    };
+
+    assert_eq!(
+      not_found_error.message(),
+      "The requested item was not found".to_string(),
+      "Not found message should be shown"
+    )
+  }
+
+  #[test]
+  fn test_custom_message() {
+    let custom_message: String = "Unable to create item".to_string();
+
+    let db_error: AppError = AppError {
+      message: Some(custom_message.clone()),
+      cause: None,
+      error_type: AppErrorType::DbError,
+    };
+
+    assert_eq!(
+      db_error.message(),
+      custom_message,
+      "User-facing message should be shown"
+    )
   }
 }

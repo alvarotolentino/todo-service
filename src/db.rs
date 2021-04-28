@@ -64,7 +64,6 @@ pub async fn check_item(client: &Client, list_id: i32, item_id: i32) -> Result<b
     )
     .await
     .map_err(AppError::db_error)?;
-    
   let result = client
     .execute(&statement, &[&list_id, &item_id])
     .await

@@ -29,7 +29,7 @@ pub async fn status() -> impl Responder {
 }
 
 pub async fn get_todos(state: web::Data<AppState>) -> Result<impl Responder, AppError> {
-  let log = state.log.new(o!("handler" => "get_todos"));
+  let log: Logger = state.log.new(o!("handler" => "get_todos"));
 
   let client: Client = get_client(state.pool.clone(), log.clone()).await?;
 
@@ -44,7 +44,7 @@ pub async fn get_items(
   state: web::Data<AppState>,
   path: web::Path<(i32,)>,
 ) -> Result<impl Responder, AppError> {
-  let log = state.log.new(o!("handler" => "get_items"));
+  let log: Logger = state.log.new(o!("handler" => "get_items"));
 
   let client: Client = get_client(state.pool.clone(), log.clone()).await?;
 
@@ -59,7 +59,7 @@ pub async fn create_todo(
   state: web::Data<AppState>,
   json: web::Json<CreateTodoList>,
 ) -> Result<impl Responder, AppError> {
-  let log = state.log.new(o!("handler" => "create_todo"));
+  let log: Logger = state.log.new(o!("handler" => "create_todo"));
 
   let client: Client = get_client(state.pool.clone(), log.clone()).await?;
 
@@ -73,7 +73,7 @@ pub async fn check_item(
   state: web::Data<AppState>,
   path: web::Path<(i32, i32)>,
 ) -> Result<impl Responder, AppError> {
-  let log = state.log.new(o!("handler" => "check_item"));
+  let log: Logger = state.log.new(o!("handler" => "check_item"));
 
   let client: Client = get_client(state.pool.clone(), log.clone()).await?;
 
