@@ -1,0 +1,25 @@
+version: "3.1"
+services: 
+  db: 
+    image: postgres:11-alpine
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - APP_DB_USER=todoservice
+      - APP_DB_PASS=todoservice
+      - APP_DB_NAME=todoservice
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432
+    deploy:
+      resources:
+        limits:
+          memory: '512M'
+          cpus: '1'
