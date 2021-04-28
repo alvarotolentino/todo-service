@@ -2,6 +2,20 @@
 This is a TODO Rest Api based in Rust with Postgres as database.
 
 ## How to run the service?
+Create an .env file in the root with the following content:
+
+```
+SERVER.HOST=[YOUR_VALUE]
+SERVER.PORT=[YOUR_VALUE]
+PG.USER=[YOUR_VALUE]
+PG.PASSWORD=[YOUR_VALUE]
+PG.HOST=[YOUR_VALUE]
+PG.PORT=[YOUR_VALUE]
+PG.DBNAME=[YOUR_VALUE]
+PG.POOL.MAX_SIZE=[YOUR_VALUE]
+```
+
+Replace [YOUR_VALUE] with you own values.
 
 Execute the following command:
 
